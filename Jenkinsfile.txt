@@ -44,5 +44,32 @@ pipeline {
 				])
             }
         }
+		stage('Install') {
+            steps {
+                sh 'mvn install -DskipTests'
+            }
+        }
+		stage('Launch Tomcat Server') {
+            steps {
+                sh '/tmp/apache-tomcat-9.0.20/bin/startup.sh'
+            }
+        }
+		stage('Deploy War on Tomcat Server') {
+            steps {
+                sh 'cp /var/jenkins_home/workspace/verity-devops-ex/target/ExpenseApp-1.war /tmp/apache-tomcat-9.0.20/webapps'
+            }
+        }
+		stage('API Test') {
+            steps {
+				git url: 'https://github.com/ferruzoft/EMAPITests-ex.git'
+            	sh 'mvn -Dtest=ExpenseManagerAPITest test'
+            }
+        }
+		stage('System Test') {
+            steps {
+				git url: 'https://github.com/ferruzoft/EMSystemTests-ex.git'
+            	sh 'mvn -Dtest=ExpenseManagerSystemTest test'
+            }
+        }
     }
 }
