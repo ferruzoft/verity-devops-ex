@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh 'mvn compile'
             }
-        }
+        }/*
 		stage('Code Analysis') {
             steps {
 			 script {
@@ -26,7 +26,7 @@ pipeline {
 				sh "${scannerHome}/bin/sonar-scanner"
 				}
 			}
-		}
+		}*/
         stage('Unit Test') {
             steps {
                 sh 'mvn test'
@@ -69,6 +69,13 @@ pipeline {
             steps {
 				git url: 'https://github.com/ferruzoft/EMSystemTests-ex.git'
             	sh 'mvn -Dtest=ExpenseManagerSystemTest test'
+            }
+        }
+		stage('BDD Test') {
+            steps {
+				//Change git url below as per your forked github repository URL
+				git url: 'https://github.com/ferruzoft/EMSystemTests_BDD.git'
+            	sh 'mvn -Dtest=TestRunner test'
             }
         }
     }
